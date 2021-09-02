@@ -22,7 +22,7 @@ public class Main {
             try {
                 response = Integer.parseInt(sc.next());
             } catch (NumberFormatException e) {
-                e.printStackTrace();
+                e.printStackTrace(System.out);
             }
 
             switch (response) {
@@ -30,13 +30,16 @@ public class Main {
                     movieCatalog.initFile(fileName);
                     break;
                 case 2:
-//                    movieCatalog.addMovie("Superman",fileName);
+                    movieCatalog.addMovie("Captain America",fileName);
                     break;
                 case 3:
-                    System.out.println("Ho");
+                    movieCatalog.listMovies(fileName);
                     break;
                 case 4:
-                    System.out.println("Hol");
+                    movieCatalog.searchMovie(fileName, "Captain America");
+                    break;
+                case 0:
+                    System.out.println("Bye!");
                     break;
                 default:
                     System.out.println("Please digit a valid number");

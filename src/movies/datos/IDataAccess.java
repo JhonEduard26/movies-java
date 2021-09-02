@@ -8,7 +8,7 @@ public interface IDataAccess {
 
     boolean isExist(String fileName);
 
-    List<Movies> list();
+    List<Movies> list(String fileName);
 
     void write(Movies movies, String fileName, boolean append);
 
