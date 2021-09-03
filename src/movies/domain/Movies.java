@@ -20,9 +20,6 @@ public class Movies {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Movies{");
-        sb.append("name='").append(name).append('\'');
-        sb.append('}');
-        return sb.toString();
+        return this.name;
     }
 }

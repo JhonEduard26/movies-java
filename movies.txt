@@ -1,4 +1,4 @@
-Movies{name='Superman'}
-Movies{name='Ironman'}
-Movies{name='Hulk'}
-Movies{name='Captain America'}
+Batman
+Superman
+Spiderman
+Wonder woman

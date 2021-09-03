@@ -2,11 +2,13 @@ package movies.negocio;
 
 public interface IMovieCatalog {
 
-    void addMovie(String movieName, String fileName);
+    String FILE_NAME = "movies.txt";
 
-    void listMovies(String fileName);
+    void addMovie(String movieName);
 
-    void searchMovie(String fileName, String movieName);
+    void listMovies();
 
-    void initFile(String fileName);
+    void searchMovie(String movieName);
+
+    void initMovieCatalog();
 }

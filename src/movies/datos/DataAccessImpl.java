@@ -1,84 +1,99 @@
 package movies.datos;
 
 import movies.domain.Movies;
-
+import movies.excepciones.*;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class DataAccessImpl implements IDataAccess{
 
     @Override
-    public boolean isExist(String fileName) {
-        return false;
+    public boolean isExist(String fileName){
+        File file = new File(fileName);
+        return file.exists();
     }
 
     @Override
-    public List<Movies> list(String fileName) {
+    public List<Movies> list(String fileName) throws ReadDataEx {
         List<Movies> myList = new ArrayList<>();
         File file = new File(fileName);
         try {
             BufferedReader input = new BufferedReader(new FileReader(file));
             String read = input.readLine();
-            myList.add(new Movies(read));
             while(read != null) {
-                System.out.println(read);
-                read = input.readLine();
                 myList.add(new Movies(read));
+                read = input.readLine();
             }
             input.close();
         } catch (IOException e) {
             e.printStackTrace();
+            throw new ReadDataEx("Exception to list movies: " + e.getMessage());
         }
         return myList;
     }
 
     @Override
-    public void write(Movies movies, String fileName, boolean append) {
+    public void write(Movies movies, String fileName, boolean append) throws WriteDataEx {
         File file = new File(fileName);
-        if (!append) {
-            try {
-                PrintWriter exit = new PrintWriter(file);
+            try{
+                PrintWriter exit = new PrintWriter(new FileWriter(file, append));
                 exit.println(movies);
                 exit.close();
                 System.out.println("The movie was added correctly");
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        } else {
-            try{
-                PrintWriter exit = new PrintWriter(new FileWriter(file, true));
-                exit.println(movies);
-                exit.close();
-                System.out.println("File was overwrote and the movie was added correctly");
             }catch (FileNotFoundException e) {
                 e.printStackTrace(System.out);
             } catch (IOException e) {
                 e.printStackTrace();
+                throw new WriteDataEx("Exception to write movies: " + e.getMessage());
             }
+    }
+
+    @Override
+    public String search(String fileName, String movieName) throws ReadDataEx{
+        File file = new File(fileName);
+        String result = "The movie was not found";
+        try {
+            BufferedReader input = new BufferedReader(new FileReader(file));
+            String read = input.readLine();
+            int index = 1;
+            while (read != null) {
+                if (movieName != null && movieName.equalsIgnoreCase(read)) {
+                    result = "Movie: " + read + " found in the index: " + index;
+                    break;
+                }
+                read = input.readLine();
+                index += 1;
+            }
+            input.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new ReadDataEx("Exception to search movies: " + e.getMessage());
         }
+        return result;
     }
 
     @Override
-    public String search(String fileName, String movieName) {
-        return null;
-    }
-
-    @Override
-    public void create(String fileName) {
+    public void create(String fileName) throws DataAccessEx {
         File file = new File(fileName);
 
         try {
-            PrintWriter printWriter = new PrintWriter(file);
-            printWriter.close();
+            PrintWriter output = new PrintWriter(new FileWriter(file));
+            output.close();
             System.out.println("File was created");
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
+            throw new DataAccessEx("Exception to create file" + e.getMessage());
         }
     }
 
     @Override
-    public void delete(String fileName) {
-
+    public void delete(String fileName){
+        File file = new File(fileName);
+        if (file.exists()){
+            file.delete();
+            System.out.println("The file was deleted");
+        }
     }
 }
